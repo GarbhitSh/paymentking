@@ -1,0 +1,10 @@
+<!-- transactions/templates/transactions/transaction_status.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Transaction Status</h2>
+<p><strong>ID:</strong> {{ transaction.id }}</p>
+<p><strong>Status:</strong> {{ transaction.status }}</p>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}

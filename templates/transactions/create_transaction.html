@@ -1,0 +1,12 @@
+<!-- transactions/templates/transactions/create_transaction.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Create Transaction</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="amount">Amount (INR):</label>
+    <input type="number" id="amount" name="amount" required>
+    <button type="submit">Create Transaction</button>
+</form>
+{% endblock %}

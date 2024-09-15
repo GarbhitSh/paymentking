@@ -1,0 +1,22 @@
+<!-- transactions/templates/transactions/transaction_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Transaction Details</h2>
+<p><strong>ID:</strong> {{ transaction.id }}</p>
+<p><strong>Amount:</strong> INR {{ transaction.amount }}</p>
+<p><strong>Status:</strong> {{ transaction.status }}</p>
+
+{% if transaction.status == 'success' %}
+    <p>Payment successful. UPI Reference ID: {{ transaction.upi_reference_id }}</p>
+{% else %}
+    <h3>Scan this QR code to make the payment:</h3>
+    <div>
+        {{ svg|safe }}
+    </div>
+    <p>After scanning, refresh this page to check payment status.</p>
+{% endif %}
+
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}

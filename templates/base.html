@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Payment System{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'transactions-overview' %}">Transactions Overview</a></li> <!-- Add link here -->
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+    
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

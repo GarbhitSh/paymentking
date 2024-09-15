@@ -1,0 +1,38 @@
+<!-- transactions/templates/transactions/transaction_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Transaction Details</h2>
+<p><strong>ID:</strong> {{ transaction.id }}</p>
+<p><strong>Amount:</strong> INR {{ transaction.amount }}</p>
+<p><strong>Status:</strong> {{ transaction.status }}</p>
+
+{% if transaction.status == 'pending' %}
+    <h3>Scan this QR code to make the payment:</h3>
+    <img src="data:image/png;base64,{{ qr_code_base64 }}" alt="QR Code">
+
+    <h3>Select Payment Method:</h3>
+
+    <!-- UPI Gateway Payment Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="gateway">Pay with UPI Gateway</button>
+    </form>
+
+    <hr>
+
+    <!-- Manual Verification Form -->
+    <h3>Manual Verification</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="transaction_id">Enter Transaction ID:</label>
+        <input type="text" id="transaction_id" name="transaction_id" required>
+        <button type="submit" name="confirm">Mark as Paid</button>
+    </form>
+
+{% else %}
+    <p>Payment successful! Transaction ID: {{ transaction.transaction_id }}</p>
+{% endif %}
+
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}

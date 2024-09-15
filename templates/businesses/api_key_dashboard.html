@@ -1,0 +1,22 @@
+<h2>API Key Management</h2>
+
+{% if api_key %}
+<p>Your current API key:</p>
+<pre>{{ api_key }}</pre>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="regenerate_key">Regenerate API Key</button>
+</form>
+
+<form method="post" action="{% url 'delete_api_key' %}">
+    {% csrf_token %}
+    <button type="submit">Delete API Key</button>
+</form>
+{% else %}
+<p>You currently do not have an API key. Generate one using the button below:</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="generate_key">Generate API Key</button>
+</form>
+{% endif %}

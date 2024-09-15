@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Transactions Overview</h1>
+
+<!-- Features Section -->
+<h2>Features</h2>
+<ul>
+    {% for feature in features %}
+        <li>{{ feature }}</li>
+    {% endfor %}
+</ul>
+
+<!-- Transactions Section -->
+<h2>Transactions</h2>
+{% if transactions %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Transaction ID</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.status }}</td>
+                    <td>{{ transaction.transaction_id }}</td>
+                    <td>{{ transaction.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No transactions found.</p>
+{% endif %}
+
+<a href="{% url 'create-transaction' %}">Create a New Transaction</a>
+{% endblock %}

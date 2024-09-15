@@ -1,0 +1,31 @@
+<!-- businesses/templates/businesses/dashboard.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<p>Business Name: {{ business.name }}</p>
+<p>UPI ID: {{ business.upi_id }}</p>
+<p><a href="{% url 'create-transaction' %}">Create New Transaction</a></p>
+<h3>Transactions</h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr>
+        <td>{{ transaction.id }}</td>
+        <td>{{ transaction.amount }}</td>
+        <td>{{ transaction.status }}</td>
+        <td><a href="{% url 'transaction-detail' transaction.id %}">View</a></td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No transactions found.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
