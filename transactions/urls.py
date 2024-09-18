@@ -17,6 +17,7 @@ urlpatterns = [
     path('api-key/delete/', views.delete_api_key, name='delete_api_key'),
     path('api/generate-qr/', api_views.generate_qr_code_api, name='generate_qr_code_api'),
     path('transactions-overview/', views.transactions_overview, name='transactions-overview'),  # New route
+    path('analytics', views.analytics, name='analytics'),  # New route
 
 
 

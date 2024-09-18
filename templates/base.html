@@ -1,18 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}Payment System{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Payment King{% endblock %}</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        /* Vertical Navigation Bar */
+        nav {
+            width: 250px;
+            background-color: #2c3e50;
+            height: 100vh;
+            padding-top: 20px;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 15px 20px;
+            display: block;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #34495e;
+        }
+
+        /* Main Content Area */
+        .content {
+            margin-left: 250px; /* To prevent content from going under the navbar */
+            padding: 40px;
+            flex: 1;
+        }
+
+        /* Responsive Design for smaller screens */
+        @media (max-width: 768px) {
+            nav {
+                width: 200px;
+            }
+
+            .content {
+                margin-left: 200px;
+            }
+
+            nav ul li a {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Vertical Navigation Bar -->
     <nav>
         <ul>
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li><a href="{% url 'transactions-overview' %}">Transactions Overview</a></li> <!-- Add link here -->
+            <li><a href="{% url 'analytics' %}">Analytics</a></li>
+
+            <li><a href="{% url 'create-transaction' %}">Create new</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
+
         </ul>
     </nav>
-    
-    <div>
+
+    <!-- Main Content Area -->
+    <div class="content">
         {% block content %}
         {% endblock %}
     </div>

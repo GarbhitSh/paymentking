@@ -4,11 +4,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Transaction, APIKey
 from django.contrib import messages
 from qrcode import make
-from .upi_gateway import create_upi_order  # Import the UPI Gateway utility function
+from .upi_gateway import create_upi_order  
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-# API Key Management Dashboard
 @login_required
 def api_key_dashboard(request):
     """
@@ -21,7 +20,6 @@ def api_key_dashboard(request):
     
     return render(request, 'dashboard/api_key_dashboard.html', {'api_key': api_key_obj.api_key})
 
-# API Key Deletion
 @login_required
 def delete_api_key(request):
     """
@@ -31,7 +29,6 @@ def delete_api_key(request):
     api_key_obj.delete()
     return redirect('api_key_dashboard')
 
-# UPI Callback Handling
 @login_required
 def upi_callback(request):
     """
@@ -42,7 +39,6 @@ def upi_callback(request):
         transaction_id = data.get('transaction_id')
         status = data.get('status')
 
-        # Update the transaction status based on the callback data
         try:
             transaction = Transaction.objects.get(transaction_id=transaction_id)
             if status == 'success':
@@ -56,12 +52,10 @@ def upi_callback(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-# Transaction Creation
 @login_required
 def create_transaction(request):
     if request.method == 'POST':
         amount = request.POST.get('amount')
-        # Creating a transaction without needing `upi_reference_id`
         transaction = Transaction.objects.create(
             business=request.user.business,  # Assuming the user is related to a business
             amount=amount,
@@ -70,7 +64,6 @@ def create_transaction(request):
     
     return render(request, 'transactions/create_transaction.html')
 
-# Transaction Details with QR Code Generation
 @login_required
 def transaction_detail(request, transaction_id):
     """
@@ -79,30 +72,24 @@ def transaction_detail(request, transaction_id):
     transaction = get_object_or_404(Transaction, transaction_id=transaction_id, business__user=request.user)
     upi_url = f"upi://pay?pa={transaction.business.upi_id}&pn={transaction.business.name}&am={transaction.amount}&cu=INR"
 
-    # Generate QR code
     qr = make(upi_url)
     buffer = BytesIO()
     qr.save(buffer, format='PNG')
     buffer.seek(0)
     
-    # Base64 encode the image
     qr_code_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-    # Check if using UPI Gateway or manual verification
     if request.method == 'POST':
         if 'gateway' in request.POST:
-            # Call UPI Gateway to create the order
             upi_response = create_upi_order(transaction.amount, transaction.business.upi_id)
 
             if 'error' in upi_response:
                 messages.error(request, f"Failed to create UPI order: {upi_response['error']}")
             else:
-                # Update the transaction with the UPI gateway response
                 transaction.transaction_id = upi_response.get('order_id', 'TXN_GATEWAY_123456')
                 transaction.status = 'pending'
                 transaction.save()
 
-                # Redirect user to complete payment (or show QR code/URL to pay)
                 payment_url = upi_response.get('payment_url')
                 if payment_url:
                     return redirect(payment_url)
@@ -113,7 +100,6 @@ def transaction_detail(request, transaction_id):
         elif 'confirm' in request.POST:
             entered_transaction_id = request.POST.get('transaction_id')
 
-            # Manual verification: Match entered Transaction ID with transaction_id field
             if entered_transaction_id == transaction.transaction_id:
                 transaction.status = 'success'
                 transaction.save()
@@ -128,16 +114,13 @@ def transaction_detail(request, transaction_id):
     }
     return render(request, 'transactions/transaction_detail.html', context)
 
-# Transactions Overview Page
 @login_required
 def transactions_overview(request):
     """
     Renders a page that shows all the features and lists all transactions.
     """
-    # Fetch all transactions
     transactions = Transaction.objects.filter(business__user=request.user)
     
-    # Define the available features for display
     features = [
         'Create a transaction',
         'Generate QR code for payment',
@@ -152,3 +135,7 @@ def transactions_overview(request):
         'features': features,
     }
     return render(request, 'transactions/transactions_overview.html', context)
+
+def analytics(request):
+        return render(request, 'analytics.html')
+
